@@ -1,6 +1,7 @@
 SDK-Android
 ===========
-SDK Version: 1.0.1 
+SDK Version: 1.0.1<br />
+Website: http://startad.mobi 
 
 Quick Start Guide
 ----------------------------------
@@ -29,19 +30,10 @@ The five lines of code it takes to add a banner:
 
 The easiest place to do all this is in your app's Activity.
 ```Java
-package com.startad.demo;
-
-import android.app.Activity;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.startad.lib.SADView;
 
-public class BannerActivity extends Activity implements View.OnClickListener{
+public class BannerActivity extends Activity{
     protected SADView sadView;
 
     @Override
@@ -74,6 +66,67 @@ public class BannerActivity extends Activity implements View.OnClickListener{
 
 ```
 
+####Ad lifecycle events
+You may optionally track ad lifecycle events like request failures or "click-through" by implementing com.startad.lib.SADView.SADListener in an object you pass to SadView.setAdListener.
+
+```Java
+    public interface SADListener{
+        public void onReceiveAd();
+        public void onShowedAd();
+        public void onError(SADView.ErrorCode error);
+        public void onAdClicked();
+        public void noAdFound();
+    }
+```
+
+Sample
+```Java
+        this.sadView = new SADView(this, APPLICATION_ID);
+        this.sadView.setAdListener(new SADView.SADListener() {
+            @Override
+            public void onReceiveAd() {
+                Log.d("SADView", "SADListener onReceiveId");
+            }
+
+            @Override
+            public void onShowedAd() {
+                Log.d("SADView", "SADListener onShowedAd");
+            }
+
+            @Override
+            public void onError(SADView.ErrorCode error) {
+                Log.d("SADView", "SADListener onError " + error);
+            }
+
+            @Override
+            public void onAdClicked() {
+                Log.d("SADView", "SADListener onAdClicked");
+            }
+
+            @Override
+            public void noAdFound() {
+                Log.d("SADView", "SADListener noAdFound");
+            }
+        });
+```
+
+####Save and restore SADView state
+```Java
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if(null != this.sadView) this.sadView.saveInstanceState(outState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if(null != this.sadView) this.sadView.restoreInstanceState(outState);
+    }
+```
+
 Legal Requirements:
 ----------------------------------
-You must accept the terms and conditions on the StartAD.mobi website by registering in order to legally use the StartAD SDK.
+You must accept the [terms and conditions](http://startad.mobi/index/rules/) on the [StartAD.mobi](http://startad.mobi) website by registering in order to legally use the StartAD SDK.
