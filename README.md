@@ -121,7 +121,7 @@ Sample
 
     @Override
     public void onRestoreInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+        super.onRestoreInstanceState(outState);
 
         if(null != this.sadView) this.sadView.restoreInstanceState(outState);
     }
